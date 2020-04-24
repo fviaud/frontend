@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
+import { NavLink as RouterLink } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
@@ -11,7 +13,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 
-import { client, gestion, admin, setting } from "./pages";
+import { client, gestion, admin, setting } from "./../../menu";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,9 +34,15 @@ export default (props) => {
   const theme = useTheme();
   const { handleDrawerClose } = props;
 
-  const [pages] = useState(client);
+  const [clients] = useState(client);
   const [gestions] = useState(gestion);
   const [settings] = useState(setting);
+
+  const CustomRouterLink = forwardRef((props, ref) => (
+    <div ref={ref} style={{ flexGrow: 1 }}>
+      <RouterLink {...props} />
+    </div>
+  ));
 
   return (
     <>
@@ -49,13 +57,15 @@ export default (props) => {
       </div>
       <Divider />
       <List>
-        {pages.map((page, index) => (
-          <ListItem button key={page.titre}>
-            <ListItemIcon>
-              {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
-              {page.icon}
-            </ListItemIcon>
-            <ListItemText primary={page.title} />
+        {clients.map((client, index) => (
+          <ListItem
+            button
+            key={client.titre}
+            component={CustomRouterLink}
+            to={client.href}
+          >
+            <ListItemIcon>{client.icon}</ListItemIcon>
+            <ListItemText primary={client.title} />
           </ListItem>
         ))}
       </List>
@@ -63,10 +73,7 @@ export default (props) => {
       <List>
         {gestions.map((page, index) => (
           <ListItem button key={page.titre}>
-            <ListItemIcon>
-              {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
-              {page.icon}
-            </ListItemIcon>
+            <ListItemIcon>{page.icon}</ListItemIcon>
             <ListItemText primary={page.title} />
           </ListItem>
         ))}
@@ -76,25 +83,11 @@ export default (props) => {
       <List>
         {settings.map((setting, index) => (
           <ListItem button key={setting.titre}>
-            <ListItemIcon>
-              {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
-              {setting.icon}
-            </ListItemIcon>
+            <ListItemIcon>{setting.icon}</ListItemIcon>
             <ListItemText primary={setting.title} />
           </ListItem>
         ))}
       </List>
-
-      {/* <List>
-        {["Account", "Settings", "Exit"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List> */}
     </>
   );
 };

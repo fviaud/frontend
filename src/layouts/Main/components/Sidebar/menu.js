@@ -27,7 +27,7 @@ export const client = [
   {
     title: "Catalogue",
     id: "catalogue",
-    href: "/offres",
+    href: "/SignIn",
     icon: <StorefrontIcon />,
   },
 
