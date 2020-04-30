@@ -1,36 +1,35 @@
-import React from "react";
+import React, { useContext } from "react";
+
 import { Switch, Redirect } from "react-router-dom";
 import { RouteWithLayout } from "./components";
 
-import { Main as MainLayout, Minimal as MinimalLayout } from "./layouts";
+import { MyContext } from "App";
+
 import {
-  Dashboard as DashboardView,
-  Projets as ProjetsView,
-  SignIn as SignInView,
-} from "./views";
+  Main as MainLayout,
+  Minimal as MinimalLayout,
+  Partiel as PartielLayout,
+} from "./layouts";
+import { Dashboard as DashboardView, Movies as MoviesView } from "./views";
 
 export const Routes = () => {
+  const [user, setUser] = useContext(MyContext);
   return (
     <Switch>
       <RouteWithLayout
-        component={DashboardView}
+        component={MoviesView}
+        exact
+        layout={PartielLayout}
+        path="/Movies"
+      />
+      {!user ? <Redirect to="/Movies" /> : null}
+      <RouteWithLayout
+        component={MoviesView}
         exact
         layout={MainLayout}
-        path="/dashboard"
+        path="/Movies"
       />
-      <RouteWithLayout
-        component={ProjetsView}
-        exact
-        layout={MinimalLayout}
-        path="/Projets"
-      />
-      <RouteWithLayout
-        component={SignInView}
-        exact
-        layout={MinimalLayout}
-        path="/SignIn"
-      />
-      <Redirect to="/dashboard" />
+      <Redirect to="/Movies" />
     </Switch>
   );
 };

@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+// import { useTranslation } from "react-i18next";
+import { Link as RouterLink } from "react-router-dom";
+import validate from "validate.js";
+import { makeStyles } from "@material-ui/styles";
+import { Grid, Button, TextField, Link, Typography } from "@material-ui/core";
 
-import { makeStyles, useTheme } from "@material-ui/styles";
-import { Grid, Typography } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Alert } from "@material-ui/lab";
+
+// import apiAuth from "conf/api.auth";
+import { MyContext } from "App";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundImage: "url(/images/fibre_signin.png)",
+    backgroundImage: "url(/images/film.jpg)",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
@@ -92,7 +100,88 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default (props) => {
+  const [, setCurentUser] = useContext(MyContext);
   const classes = useStyles();
+
+  const schema = {
+    username: {
+      presence: { allowEmpty: false, message: "is required" },
+      length: {
+        maximum: 64,
+      },
+    },
+    password: {
+      presence: { allowEmpty: false, message: "is required" },
+      length: {
+        maximum: 128,
+      },
+    },
+  };
+
+  const [formState, setFormState] = useState({
+    isValid: false,
+    loading: false,
+    values: {},
+    touched: {},
+    errors: {},
+    api: null,
+  });
+
+  useEffect(() => {
+    const errors = validate(formState.values, schema);
+    setFormState((formState) => ({
+      ...formState,
+      isValid: errors ? false : true,
+      errors: errors || {},
+    }));
+  }, [formState.values]);
+
+  const handleChange = (event) => {
+    event.persist();
+    setFormState((formState) => ({
+      ...formState,
+      values: {
+        ...formState.values,
+        [event.target.name]:
+          event.target.type === "checkbox"
+            ? event.target.checked
+            : event.target.value,
+      },
+      touched: {
+        ...formState.touched,
+        [event.target.name]: true,
+      },
+    }));
+  };
+
+  const erreur = (error) => {
+    let erreurMessage;
+    if (error.response) {
+      erreurMessage = error.response.data.message;
+    } else {
+      erreurMessage = error.message;
+    }
+    setFormState((formState) => ({
+      ...formState,
+      api: erreurMessage,
+      isValid: true,
+      loading: false,
+    }));
+  };
+
+  const handleSignIn = (event) => {
+    setFormState((formState) => ({
+      ...formState,
+      isValid: false,
+      loading: true,
+    }));
+
+    event.preventDefault();
+  };
+
+  const hasError = (field) =>
+    formState.touched[field] && formState.errors[field] ? true : false;
+
   return (
     <div className={classes.root}>
       <Grid className={classes.grid} container>
@@ -100,7 +189,7 @@ export default (props) => {
           <div className={classes.quote}>
             <div className={classes.quoteInner}>
               <Typography className={classes.quoteText} variant="h1">
-                Get your IT resources.
+                Choose your movie.
               </Typography>
             </div>
           </div>
@@ -108,8 +197,7 @@ export default (props) => {
         <Grid className={classes.content} item lg={7} xs={12}>
           <div className={classes.content}>
             <div className={classes.contentBody}>
-              {/* <form className={classes.form} onSubmit={handleSignIn}></form> */}
-              <form className={classes.form}>
+              <form className={classes.form} onSubmit={handleSignIn}>
                 <Typography
                   align="center"
                   className={classes.sugestion}
@@ -122,6 +210,76 @@ export default (props) => {
                     height="50"
                   />
                 </Typography>
+                <Typography className={classes.title} variant="h2">
+                  Login
+                </Typography>
+
+                <TextField
+                  className={classes.textField}
+                  error={hasError("username")}
+                  fullWidth
+                  helperText={
+                    hasError("username") ? formState.errors.username[0] : null
+                  }
+                  label="email"
+                  name="username"
+                  onChange={handleChange}
+                  type="text"
+                  value={formState.values.username || ""}
+                  variant="outlined"
+                />
+                <TextField
+                  className={classes.textField}
+                  error={hasError("password")}
+                  fullWidth
+                  helperText={
+                    hasError("password") ? formState.errors.password[0] : null
+                  }
+                  label={"Password"}
+                  name="password"
+                  onChange={handleChange}
+                  type="password"
+                  value={formState.values.password || ""}
+                  variant="outlined"
+                />
+                <div className={classes.wrapper}>
+                  <Button
+                    id="btn-signin"
+                    className={classes.signInButton}
+                    color="primary"
+                    disabled={!formState.isValid}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                  >
+                    Login
+                  </Button>
+                  {formState.loading && (
+                    <CircularProgress
+                      size={24}
+                      className={classes.buttonProgress}
+                    />
+                  )}
+                </div>
+
+                {/* {formState.api && (
+                  <Typography color="textSecondary" variant="body1">
+                    <Alert
+                      onClose={() => {
+                        setFormState((formState) => ({
+                          ...formState,
+                          api: "",
+                        }));
+                      }}
+                      variant="filled"
+                      severity="error"
+                      className={classes.erreur}
+                    >
+                      {formState.api}
+                    </Alert>
+                  </Typography>
+                )} */}
               </form>
             </div>
           </div>

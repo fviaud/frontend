@@ -1,6 +1,6 @@
 import React from "react";
-import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { Box, Typography } from "@material-ui/core";
 
 const LauchScreen = (props) => {
   return (
@@ -12,6 +12,7 @@ const LauchScreen = (props) => {
       textAlign="center"
     >
       <CircularProgress />
+      <Typography>Chargement en cours ...</Typography>
     </Box>
   );
 };

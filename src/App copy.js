@@ -12,19 +12,20 @@ const browserHistory = createBrowserHistory();
 export const MyContext = createContext();
 
 function App() {
-  const [curentUser, setCurentUser] = useState();
-  const [ready, setReady] = useState(false);
+  const [curentUser, setCurentUser] = useState({ loading: true });
 
   useEffect(() => {
     setTimeout(() => {
-      setReady(true);
+      setCurentUser({
+        loading: false,
+      });
     }, 3000);
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <MyContext.Provider value={[curentUser, setCurentUser]}>
-        {!ready ? (
+        {curentUser.loading ? (
           <LaunchScreen />
         ) : (
           <Router history={browserHistory}>
