@@ -21,10 +21,13 @@ const useStyles = makeStyles((theme) => ({
   img: {
     width: "100%",
   },
+  active: {
+    color: theme.palette.success.main,
+  },
 }));
 
 export default (props) => {
-  const { onSignInClick } = props;
+  const { user, onSignInClick, isFavori, handelFavoris } = props;
   const classes = useStyles();
   const { movie } = props;
 
@@ -43,7 +46,12 @@ export default (props) => {
           </Grid>
         </CardContent>
         <CardActions>
-          <IconButton aria-label="add to favorites" onClick={onSignInClick}>
+          <IconButton
+            aria-label="add to favorites"
+            className={isFavori ? classes.active : "nothing"}
+            // onClick={!user ? onSignInClick : () => handelFavoris()}
+            onClick={() => handelFavoris(isFavori, movie)}
+          >
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="share">
