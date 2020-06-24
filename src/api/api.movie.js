@@ -18,3 +18,17 @@ export const apiMovieMap = (m) => ({
   details: `${m.release_date} | ${m.vote_average}/10 (${m.vote_count})`,
   description: m.overview,
 });
+
+export const getMovies = async (setState, page) => {
+  try {
+    const response = await apiMovie.get(
+      "/discover/movie?language=fr-FR&page=" + page
+    );
+    setState({
+      values: response.data.results.map(apiMovieMap),
+      loading: false,
+    });
+  } catch (error) {
+    setState({ values: [], loading: false, error: error.message });
+  }
+};

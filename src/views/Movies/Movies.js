@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import firebase from "firebase";
 import Grid from "@material-ui/core/Grid";
-import apiMovie, { apiMovieMap } from "api/api.movie";
+import Alert from "@material-ui/lab/Alert";
+import Box from "@material-ui/core/Box";
+
+import { getMovies } from "api/api.movie";
 import apiFirebase from "api/api.firebase";
 import Movie from "./Movie";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    margin: theme.spacing(1),
+  },
+  img: {
+    width: "100%",
   },
 }));
 
@@ -17,20 +24,9 @@ export default (props) => {
   const [movies, setMovies] = useState({ loading: true });
   const [favoris, setFavoris] = useState({ values: [], loading: false });
   const classes = useStyles();
+
   useEffect(() => {
-    apiMovie
-      .get("/discover/movie")
-      .then((response) => response.data.results)
-      .then((moviesApi) => {
-        setMovies({ values: moviesApi.map(apiMovieMap), loading: false });
-      })
-      .catch((err) => console.log(err));
-    apiFirebase.get("films.json").then((response) => {
-      setFavoris({
-        values: response.data ? response.data : [],
-        loading: false,
-      });
-    });
+    getMovies(setMovies, 4);
   }, []);
 
   const handelFavoris = (isFavori, movie) => {
@@ -40,6 +36,8 @@ export default (props) => {
         values: [...favoris.values.filter((f) => f.title !== movie.title)],
       });
     } else {
+      const db = firebase.firestore();
+      db.collection("favoris").add(movie);
       setFavoris({ ...favoris, values: [...favoris.values, movie] });
     }
   };
@@ -48,19 +46,33 @@ export default (props) => {
     apiFirebase.put("films.json", favoris.values);
   }, [favoris.values]);
 
-  return movies.loading || favoris.loading ? (
-    "chargement en cours"
-  ) : (
-    <Grid container>
-      {movies.values.map((movie) => (
-        <Movie
-          movie={movie}
-          user={user}
-          onSignInClick={() => openDialog()}
-          isFavori={favoris.values.map((f) => f.title).includes(movie.title)}
-          handelFavoris={handelFavoris}
-        />
-      ))}
-    </Grid>
+  function Media(props) {
+    const { loading = false } = props;
+
+    return (
+      <Grid container>
+        {(loading ? Array.from(new Array(20)) : movies.values).map(
+          (movie, index) => (
+            <Movie
+              movie={movie}
+              user={user}
+              onSignInClick={() => openDialog()}
+              isFavori={
+                movie
+                  ? favoris.values.map((f) => f.title).includes(movie.title)
+                  : false
+              }
+              handelFavoris={handelFavoris}
+            />
+          )
+        )}
+      </Grid>
+    );
+  }
+
+  return (
+    <Box overflow="hidden">
+      <Media loading={movies.loading} />
+    </Box>
   );
 };

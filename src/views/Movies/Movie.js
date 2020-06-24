@@ -10,6 +10,8 @@ import {
   IconButton,
 } from "@material-ui/core";
 
+import Skeleton from "@material-ui/lab/Skeleton";
+
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 
@@ -34,29 +36,57 @@ export default (props) => {
   return (
     <Grid item xs>
       <Card className={classes.root} variant="outlined">
-        <CardHeader title={movie.title} subheader={movie.details} />
+        <CardHeader
+          title={movie ? movie.title : <Skeleton />}
+          subheader={movie ? movie.details : <Skeleton width="60%" />}
+        />
         <CardContent>
           <Grid container spacing={3}>
             <Grid item xs>
-              <img className={classes.img} src={movie.img} alt={movie.title} />
+              {movie ? (
+                <img
+                  className={classes.img}
+                  src={movie.img}
+                  alt={movie.title}
+                />
+              ) : (
+                <Skeleton variant="rect" className={classes.img} height={300} />
+              )}
             </Grid>
             <Grid item xs>
-              <Typography>{movie.description}</Typography>
+              {movie ? (
+                <Typography>{movie.description}</Typography>
+              ) : (
+                <>
+                  <Skeleton />
+                  <Skeleton />
+                  <Skeleton />
+                  <Skeleton />
+                </>
+              )}
             </Grid>
           </Grid>
         </CardContent>
         <CardActions>
-          <IconButton
-            aria-label="add to favorites"
-            className={isFavori ? classes.active : "nothing"}
-            // onClick={!user ? onSignInClick : () => handelFavoris()}
-            onClick={() => handelFavoris(isFavori, movie)}
-          >
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton>
+          {movie ? (
+            user ? (
+              <>
+                <IconButton
+                  aria-label="add to favorites"
+                  className={isFavori ? classes.active : "nothing"}
+                  // onClick={!user ? onSignInClick : () => handelFavoris()}
+                  onClick={() => handelFavoris(isFavori, movie)}
+                >
+                  <FavoriteIcon />
+                </IconButton>
+                <IconButton aria-label="share">
+                  <ShareIcon />
+                </IconButton>
+              </>
+            ) : null
+          ) : (
+            <Skeleton width="100%" />
+          )}
         </CardActions>
       </Card>
     </Grid>

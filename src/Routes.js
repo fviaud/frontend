@@ -10,7 +10,11 @@ import {
   Minimal as MinimalLayout,
   Partiel as PartielLayout,
 } from "./layouts";
-import { Dashboard as DashboardView, Movies as MoviesView } from "./views";
+import {
+  Dashboard as DashboardView,
+  Projets as ProjetsView,
+  Movies as MoviesView,
+} from "./views";
 
 export const Routes = () => {
   const [user, setUser] = useContext(MyContext);
@@ -20,16 +24,16 @@ export const Routes = () => {
         component={MoviesView}
         exact
         layout={PartielLayout}
-        path="/Movies"
+        path="/movies"
       />
-      {!user ? <Redirect to="/Movies" /> : null}
+      {/* {!user ? <Redirect to="/Movies" /> : null} */}
       <RouteWithLayout
-        component={MoviesView}
+        component={ProjetsView}
         exact
         layout={MainLayout}
-        path="/Movies"
+        path="/projets"
       />
-      <Redirect to="/Movies" />
+      <Redirect to="/movies" />
     </Switch>
   );
 };
