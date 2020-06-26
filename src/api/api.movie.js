@@ -1,4 +1,4 @@
-import * as axios from "axios";
+import axios from "axios";
 
 const apiMovie = axios.create({
   baseURL: "https://api.themoviedb.org/4",
@@ -10,9 +10,7 @@ apiMovie.interceptors.request.use((req) => {
   return req;
 });
 
-export default apiMovie;
-
-export const apiMovieMap = (m) => ({
+const apiMovieMap = (m) => ({
   img: "https://image.tmdb.org/t/p/w500" + m.poster_path,
   title: m.title,
   details: `${m.release_date} | ${m.vote_average}/10 (${m.vote_count})`,
@@ -24,10 +22,29 @@ export const getMovies = async (setState, page) => {
     const response = await apiMovie.get(
       "/discover/movie?language=fr-FR&page=" + page
     );
-    setState({
-      values: response.data.results.map(apiMovieMap),
+    setState((state) => ({
+      values: [...state.values, ...response.data.results.map(apiMovieMap)],
       loading: false,
-    });
+      hasMore: response.data.results.length > 0,
+      error: false,
+    }));
+  } catch (error) {
+    setState({ values: [], loading: false, error: error.message });
+  }
+};
+
+export const getSearchMovies = async (setState, page, query) => {
+  console.log(query);
+  try {
+    const response = await apiMovie.get(
+      `/search/movie?query=${query}&language=fr-FR&page=` + page
+    );
+    setState((state) => ({
+      values: [...state.values, ...response.data.results.map(apiMovieMap)],
+      loading: false,
+      hasMore: response.data.results.length > 0,
+      error: false,
+    }));
   } catch (error) {
     setState({ values: [], loading: false, error: error.message });
   }

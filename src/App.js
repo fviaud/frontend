@@ -13,6 +13,7 @@ export const MyContext = createContext();
 
 function App() {
   const [curentUser, setCurentUser] = useState();
+  const [query, setQuery] = useState("");
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <MyContext.Provider value={[curentUser, setCurentUser]}>
+      <MyContext.Provider value={[curentUser, setCurentUser, query, setQuery]}>
         {!ready ? (
           <LaunchScreen />
         ) : (

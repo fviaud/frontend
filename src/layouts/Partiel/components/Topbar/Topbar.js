@@ -19,8 +19,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 
 import UserAvatar from "components/UserAvatar";
 
+import SearchInput from "components/SearchInput";
+
 export default (props) => {
-  const { user } = props;
+  const { user, setQuery } = props;
   const { onSignInClick } = props;
   const { signOut } = props;
 
@@ -48,10 +50,13 @@ export default (props) => {
   return (
     <AppBar color="inherit">
       <Toolbar>
-        <Box display="flex" flexGrow={1}>
+        <Box display="flex" mr={2}>
           <Typography color="inherit" variant="h6">
             {process.env.REACT_APP_TITLE}
           </Typography>
+        </Box>
+        <Box flexGrow={1}>
+          <SearchInput setQuery={setQuery} />
         </Box>
         {!user ? (
           // <ButtonGroup color="inherit" variant="outlined">

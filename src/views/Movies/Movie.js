@@ -34,61 +34,53 @@ export default (props) => {
   const { movie } = props;
 
   return (
-    <Grid item xs>
-      <Card className={classes.root} variant="outlined">
-        <CardHeader
-          title={movie ? movie.title : <Skeleton />}
-          subheader={movie ? movie.details : <Skeleton width="60%" />}
-        />
-        <CardContent>
-          <Grid container spacing={3}>
-            <Grid item xs>
-              {movie ? (
-                <img
-                  className={classes.img}
-                  src={movie.img}
-                  alt={movie.title}
-                />
-              ) : (
-                <Skeleton variant="rect" className={classes.img} height={300} />
-              )}
-            </Grid>
-            <Grid item xs>
-              {movie ? (
-                <Typography>{movie.description}</Typography>
-              ) : (
-                <>
-                  <Skeleton />
-                  <Skeleton />
-                  <Skeleton />
-                  <Skeleton />
-                </>
-              )}
-            </Grid>
+    <Card className={classes.root} variant="outlined">
+      <CardHeader
+        title={movie ? movie.title : <Skeleton />}
+        subheader={movie ? movie.details : <Skeleton width="60%" />}
+      />
+      <CardContent>
+        <Grid container spacing={3}>
+          <Grid item xs>
+            {movie ? (
+              <img className={classes.img} src={movie.img} alt={movie.title} />
+            ) : (
+              <Skeleton variant="rect" className={classes.img} height={300} />
+            )}
           </Grid>
-        </CardContent>
-        <CardActions>
-          {movie ? (
-            user ? (
+          <Grid item xs>
+            {movie ? (
+              <Typography>{movie.description}</Typography>
+            ) : (
               <>
-                <IconButton
-                  aria-label="add to favorites"
-                  className={isFavori ? classes.active : "nothing"}
-                  // onClick={!user ? onSignInClick : () => handelFavoris()}
-                  onClick={() => handelFavoris(isFavori, movie)}
-                >
-                  <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="share">
-                  <ShareIcon />
-                </IconButton>
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
+                <Skeleton />
               </>
-            ) : null
-          ) : (
-            <Skeleton width="100%" />
-          )}
-        </CardActions>
-      </Card>
-    </Grid>
+            )}
+          </Grid>
+        </Grid>
+      </CardContent>
+      <CardActions>
+        {movie ? (
+          <>
+            <IconButton
+              className={isFavori ? classes.active : "nothing"}
+              onClick={
+                !user ? onSignInClick : () => handelFavoris(isFavori, movie)
+              }
+            >
+              <FavoriteIcon />
+            </IconButton>
+            <IconButton aria-label="share">
+              <ShareIcon />
+            </IconButton>
+          </>
+        ) : (
+          <Skeleton width="100%" />
+        )}
+      </CardActions>
+    </Card>
   );
 };

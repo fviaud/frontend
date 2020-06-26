@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
 export default (props) => {
   const { children } = props;
   const classes = useStyles();
-  const [user, setUser] = useContext(MyContext);
+  const [user, setUser, , setQuery] = useContext(MyContext);
   const [open, setOpen] = useState(false);
 
   const [snackbar, setSnackbar] = useState({
@@ -72,6 +72,7 @@ export default (props) => {
         // onSignInClick={() => openDialog("signInDialog")}
         onSignInClick={() => openDialog()}
         user={user}
+        setQuery={setQuery}
         signOut={signOut}
       />
       <main className={classes.content}>
