@@ -22,7 +22,7 @@ import UserAvatar from "components/UserAvatar";
 import SearchInput from "components/SearchInput";
 
 export default (props) => {
-  const { user, setQuery } = props;
+  const { curentUser, setQuery } = props;
   const { onSignInClick } = props;
   const { signOut } = props;
 
@@ -58,7 +58,7 @@ export default (props) => {
         <Box flexGrow={1}>
           <SearchInput setQuery={setQuery} />
         </Box>
-        {!user ? (
+        {!curentUser ? (
           // <ButtonGroup color="inherit" variant="outlined">
           //   <Button>Sign up</Button>
           //   <Button onClick={onSignInClick}>Sign in</Button>

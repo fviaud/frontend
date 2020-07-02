@@ -12,7 +12,8 @@ import Movie from "./Movie";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
 import { getMovies, getSearchMovies } from "api/api.movie";
-import apiFirebase from "api/api.firebase";
+// import apiFirebase from "api/api.firebase";
+import { getAllfavoris, delFavori, addfavori } from "api/api.firebase";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +58,7 @@ const useMovieSearch = (query, pageNumber, setPageNumber) => {
 
 export default (props) => {
   const classes = useStyles();
-  const { user, openDialog } = props;
+  const { curentUser, openDialog } = props;
   const [, , query] = useContext(MyContext);
   const [pageNumber, setPageNumber] = useState(1);
   const [favoris, setFavoris] = useState({ values: [], loading: false });
@@ -80,24 +81,20 @@ export default (props) => {
 
   const handelFavoris = (isFavori, movie) => {
     if (isFavori) {
+      delFavori(movie.title);
       setFavoris({
         ...favoris,
         values: [...favoris.values.filter((f) => f.title !== movie.title)],
       });
     } else {
-      const db = firebase.firestore();
-      db.collection("favoris").add(movie);
+      addfavori(movie);
       setFavoris({ ...favoris, values: [...favoris.values, movie] });
     }
   };
 
   useEffect(() => {
-    // apiFirebase.put("films.json", favoris.values);
-    // const db = firebase.firestore();
-    // const favoris = db.collection("favoris").get();
-    // console.log(favoris);
-    //todo
-  }, [favoris.values]);
+    getAllfavoris(setFavoris);
+  }, []);
 
   return (
     <>
@@ -113,7 +110,7 @@ export default (props) => {
                   <Movie
                     ref={lastMovieElementRef}
                     movie={movie}
-                    user={user}
+                    curentUser={curentUser}
                     onSignInClick={() => openDialog()}
                     isFavori={
                       movie
@@ -131,7 +128,7 @@ export default (props) => {
                 <Grid item xs>
                   <Movie
                     movie={movie}
-                    user={user}
+                    curentUser={curentUser}
                     onSignInClick={() => openDialog()}
                     isFavori={
                       movie

@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default (props) => {
-  const { user, onSignInClick, isFavori, handelFavoris } = props;
+  const { curentUser, onSignInClick, isFavori, handelFavoris } = props;
   const classes = useStyles();
   const { movie } = props;
 
@@ -68,7 +68,9 @@ export default (props) => {
             <IconButton
               className={isFavori ? classes.active : "nothing"}
               onClick={
-                !user ? onSignInClick : () => handelFavoris(isFavori, movie)
+                !curentUser
+                  ? onSignInClick
+                  : () => handelFavoris(isFavori, movie)
               }
             >
               <FavoriteIcon />

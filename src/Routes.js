@@ -17,7 +17,6 @@ import {
 } from "./views";
 
 export const Routes = () => {
-  const [user, setUser] = useContext(MyContext);
   return (
     <Switch>
       <RouteWithLayout
@@ -26,7 +25,7 @@ export const Routes = () => {
         layout={PartielLayout}
         path="/movies"
       />
-      {/* {!user ? <Redirect to="/Movies" /> : null} */}
+
       <RouteWithLayout
         component={ProjetsView}
         exact
