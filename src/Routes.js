@@ -14,6 +14,7 @@ import {
   Dashboard as DashboardView,
   Projets as ProjetsView,
   Movies as MoviesView,
+  Favoris as FavorisView,
 } from "./views";
 
 export const Routes = () => {
@@ -31,6 +32,13 @@ export const Routes = () => {
         exact
         layout={MainLayout}
         path="/projets"
+      />
+
+      <RouteWithLayout
+        component={FavorisView}
+        exact
+        layout={PartielLayout}
+        path="/favoris"
       />
       <Redirect to="/movies" />
     </Switch>

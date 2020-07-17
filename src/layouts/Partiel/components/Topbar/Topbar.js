@@ -68,13 +68,13 @@ export default (props) => {
           </Button>
         ) : (
           <>
-            <Button
+            {/* <Button
               component={CustomRouterLink}
               to={"/Projets"}
               color="inherit"
             >
               Console
-            </Button>
+            </Button> */}
             <IconButton
               aria-controls="simple-menu"
               aria-haspopup="true"
@@ -93,6 +93,13 @@ export default (props) => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
+              <MenuItem
+                component={CustomRouterLink}
+                to={"/Favoris"}
+                onClick={handleClose}
+              >
+                favoris
+              </MenuItem>
               <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>My account</MenuItem>
               <MenuItem onClick={handleSignOut}>Logout</MenuItem>

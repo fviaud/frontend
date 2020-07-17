@@ -6,7 +6,7 @@ import React, {
   useContext,
 } from "react";
 import { MyContext } from "App";
-import firebase from "firebase";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Movie from "./Movie";
 import Grid from "@material-ui/core/Grid";

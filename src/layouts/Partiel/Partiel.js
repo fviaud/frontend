@@ -7,7 +7,6 @@ import { DialogHost } from "components";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
-import firebase from "firebase";
 import authentication from "services/authentication";
 import { Topbar } from "./components";
 
@@ -68,10 +67,6 @@ export default (props) => {
   );
 
   useEffect(() => {
-    // firebase.auth().onAuthStateChanged(function (user) {
-    //   if (user) setCurentUser({ values: user });
-    // });
-
     authentication.session(setCurentUser);
   }, []);
 
